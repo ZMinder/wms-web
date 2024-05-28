@@ -1,5 +1,5 @@
 <template>
-  <el-container class="layout-container-demo" style="height: 100%">
+  <el-container class="layout-container-demo">
     <el-aside v-bind:width="collapse.asideWidth">
       <Aside></Aside>
     </el-aside>
@@ -27,6 +27,11 @@ let collapse = asideCollapse()
 </script>
 
 <style scoped>
+.layout-container-demo {
+  height: 100%;
+  margin-bottom: -8px;
+}
+
 .layout-container-demo .el-header {
   position: relative;
   background-color: var(--el-color-primary-light-7);
