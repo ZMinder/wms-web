@@ -1,5 +1,15 @@
 <template>
   <el-scrollbar>
+    <div>
+      <el-input class="nicknameInput" v-model="keywords" placeholder="请输入姓名"
+                :suffix-icon="Search" @keyup.enter.native="loadData()"></el-input>
+      <el-select class="genderSelect" v-model="gender" placeholder="请选择性别">
+        <el-option label="男" value="男"></el-option>
+        <el-option label="女" value="女"></el-option>
+      </el-select>
+      <el-button type="primary" @click="loadData()">查询</el-button>
+      <el-button type="success" @click="resetQuery()">重置</el-button>
+    </div>
     <el-table :data="userData.data" border stripe
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
               :cell-style="{textAlign:'center'}">
@@ -29,7 +39,7 @@
     <el-pagination
         v-model:current-page="userData.pageNum"
         v-model:page-size="userData.pageSize"
-        :page-sizes="[2, 5, 10, 20]"
+        :page-sizes="[5, 10, 20,30]"
         layout="total, sizes, prev, pager, next, jumper"
         :total="userData.total"
         @size-change="handleSizeChange"
@@ -41,22 +51,36 @@
 
 <script lang="ts" setup>
 import {onBeforeMount, reactive, ref} from 'vue'
+import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 
 const baseURL = "http://localhost:8090/user"
 
 let userData = reactive({
-  pageSize: 5,
+  pageSize: 10,
   pageNum: 1,
   total: 5,
   data: []
 })
 
+let keywords = ref("")//模糊查询的关键字
+
+let gender = ref("")//根据性别查询
+
 function loadData() {//组件挂载之前从后端获取数据
-  let promise = axios.get(baseURL, {
+  let url = baseURL
+  if (keywords.value != "") {//如果keywords不为空 说明是模糊查询
+    url += "/fuzzy"
+  }
+  if (gender.value == "男" || gender.value == "女") {
+    url += "/gender"
+  }
+  let promise = axios.get(url, {
     params: {
       pageSize: userData.pageSize,
-      pageNum: userData.pageNum
+      pageNum: userData.pageNum,
+      keywords: keywords.value,
+      gender: gender.value
     }
   })
   promise.then(response => {
@@ -115,7 +139,21 @@ function handleSizeChange(val) {//处理每页显示条目数改变的时候
 function handleCurrentChange(val) {//处理当前页数改变的时候情况
   loadData()
 }
+
+function resetQuery() {
+  keywords.value = ""
+  gender.value = ""
+}
 </script>
 
 <style scoped>
+.nicknameInput {
+  margin: 5px;
+  width: 200px;
+}
+
+.genderSelect {
+  width: 200px;
+  margin: 5px;
+}
 </style>
