@@ -28,11 +28,13 @@ import Main from './Main.vue'
   position: relative;
   background-color: var(--el-color-primary-light-7);
   color: var(--el-text-color-primary);
+  margin-top: -8px;
 }
 
 .layout-container-demo .el-aside {
   color: var(--el-text-color-primary);
   background: var(--el-color-primary-light-8);
+  margin-top: -8px;
 }
 
 .layout-container-demo .el-menu {
