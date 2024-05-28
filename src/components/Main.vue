@@ -26,6 +26,16 @@
         <el-button type="danger" size="default">删除</el-button>
       </el-table-column>
     </el-table>
+    <el-pagination
+        v-model:current-page="userData.pageNum"
+        v-model:page-size="userData.pageSize"
+        :page-sizes="[2, 5, 10, 20]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="userData.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        style="margin-top: 5px"
+    />
   </el-scrollbar>
 </template>
 
@@ -36,22 +46,23 @@ import axios from "axios"
 const baseURL = "http://localhost:8090/user"
 
 let userData = reactive({
-  pageSize: 10,
+  pageSize: 5,
   pageNum: 1,
-  total: 10,
+  total: 5,
   data: []
 })
 
 function loadData() {//组件挂载之前从后端获取数据
   let promise = axios.get(baseURL, {
     params: {
-      pageSize: 10,
-      pageNum: 1
+      pageSize: userData.pageSize,
+      pageNum: userData.pageNum
     }
   })
   promise.then(response => {
     if (response.data.code == 200) {
       Object.assign(userData, response.data.data)
+      console.log(userData)
     } else {
       alert("数据获取失败")
     }
@@ -96,6 +107,14 @@ function getGenderType(gender) {//获取角色tag标签的type
   }
 }
 
+function handleSizeChange(val) {//处理每页显示条目数改变的时候
+  userData.pageNum = 1//每页条目数该表的情况下，默认从第一页重新显示
+  loadData()
+}
+
+function handleCurrentChange(val) {//处理当前页数改变的时候情况
+  loadData()
+}
 </script>
 
 <style scoped>
