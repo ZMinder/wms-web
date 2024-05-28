@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar>
-    <el-table :data="tableData" border stripe
+    <el-table :data="userData.data" border stripe
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
               :cell-style="{textAlign:'center'}">
       <el-table-column prop="id" label="ID" width="100px"/>
@@ -22,20 +22,25 @@
       </el-table-column>
       <el-table-column prop="phone" label="电话"/>
       <el-table-column prop="operation" label="操作">
-        <el-button type="primary" size="medium" style="margin-right: 5px">编辑</el-button>
-        <el-button type="danger" size="medium">删除</el-button>
+        <el-button type="primary" size="default">编辑</el-button>
+        <el-button type="danger" size="default">删除</el-button>
       </el-table-column>
     </el-table>
   </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, ref} from 'vue'
+import {onBeforeMount, reactive, ref} from 'vue'
 import axios from "axios"
 
 const baseURL = "http://localhost:8090/user"
 
-let tableData = ref([])
+let userData = reactive({
+  pageSize: 10,
+  pageNum: 1,
+  total: 10,
+  data: []
+})
 
 function loadData() {//组件挂载之前从后端获取数据
   let promise = axios.get(baseURL, {
@@ -46,9 +51,7 @@ function loadData() {//组件挂载之前从后端获取数据
   })
   promise.then(response => {
     if (response.data.code == 200) {
-      tableData.value = response.data.data.data
-      console.log(tableData)
-
+      Object.assign(userData, response.data.data)
     } else {
       alert("数据获取失败")
     }
