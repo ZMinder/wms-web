@@ -4,7 +4,7 @@
       <Aside></Aside>
     </el-aside>
 
-    <el-container>
+    <el-container style="height: 100%">
       <el-header style="text-align: right; font-size: 12px">
         <Header></Header>
       </el-header>
@@ -35,6 +35,8 @@ import Main from './Main.vue'
   color: var(--el-text-color-primary);
   background: var(--el-color-primary-light-8);
   margin-top: -8px;
+  margin-left: -8px;
+  height: 100%;
 }
 
 .layout-container-demo .el-menu {
@@ -43,5 +45,6 @@ import Main from './Main.vue'
 
 .layout-container-demo .el-main {
   padding: 0;
+  height: 100%;
 }
 </style>
