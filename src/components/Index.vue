@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container-demo" style="height: 100%">
-    <el-aside width="200px">
+    <el-aside v-bind:width="collapse.asideWidth">
       <Aside></Aside>
     </el-aside>
 
@@ -20,6 +20,9 @@
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 import Main from './Main.vue'
+import {asideCollapse} from '../store/store.js'
+
+let collapse = asideCollapse()
 
 </script>
 
@@ -33,7 +36,7 @@ import Main from './Main.vue'
 
 .layout-container-demo .el-aside {
   color: var(--el-text-color-primary);
-  background: var(--el-color-primary-light-8);
+  background: #858f96;
   margin-top: -8px;
   margin-left: -8px;
   height: 100%;

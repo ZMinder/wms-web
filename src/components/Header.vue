@@ -1,8 +1,13 @@
 <template>
   <div class="toolbar">
-    <el-icon class="icon-expand">
-      <Expand/>
-    </el-icon>
+    <div class="icon-expand">
+      <el-icon v-if="collapse.isCollapse">
+        <Expand @click="cancelCollapse()"/>
+      </el-icon>
+      <el-icon v-if="!collapse.isCollapse">
+        <Fold @click="doCollapse()"/>
+      </el-icon>
+    </div>
     <div class="welcome-text">
       <span>欢迎来到仓库管理系统</span>
     </div>
@@ -22,7 +27,11 @@
 </template>
 
 <script lang="ts" setup>
-import {ArrowDownBold, Expand} from '@element-plus/icons-vue'
+import {ArrowDownBold, Expand, Fold} from '@element-plus/icons-vue'
+import {asideCollapse} from '../store/store.js'
+
+let collapse = asideCollapse()
+
 //个人中心
 function personal() {
   console.log("personal")
@@ -31,6 +40,16 @@ function personal() {
 //退出登录
 function logout() {
   console.log("logout")
+}
+
+//折叠侧边栏
+function doCollapse() {
+  collapse.collapse();
+}
+
+//展开侧边栏
+function cancelCollapse() {
+  collapse.cancelCollapse()
 }
 </script>
 
@@ -45,6 +64,7 @@ function logout() {
 .icon-expand {
   flex-shrink: 0;
   font-size: 25px;
+  cursor: pointer;
 }
 
 .welcome-text {
