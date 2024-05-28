@@ -48,7 +48,7 @@ import {ArrowDownBold, Expand} from '@element-plus/icons-vue'
 }
 
 .username {
-  font-size: 15px;
+  font-size: 18px;
   margin-right: 5px;
 }
 
