@@ -13,8 +13,8 @@
       </el-icon>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item @click="personal()">个人中心</el-dropdown-item>
+          <el-dropdown-item @click="logout()">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -23,7 +23,15 @@
 
 <script lang="ts" setup>
 import {ArrowDownBold, Expand} from '@element-plus/icons-vue'
+//个人中心
+function personal() {
+  console.log("personal")
+}
 
+//退出登录
+function logout() {
+  console.log("logout")
+}
 </script>
 
 <style scoped>
@@ -53,7 +61,7 @@ import {ArrowDownBold, Expand} from '@element-plus/icons-vue'
 }
 
 .drop-icon {
-  font-size: 12px;
+  font-size: 15px;
   margin-top: 1px;
 }
 </style>
