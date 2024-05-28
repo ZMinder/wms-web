@@ -1,7 +1,8 @@
 <template>
   <el-scrollbar>
     <el-table :data="tableData" border stripe
-              :header-cell-style="{background:'#fafafa',textAlign:'center'}">
+              :header-cell-style="{background:'#fafafa',textAlign:'center'}"
+              :cell-style="{textAlign:'center'}">
       <el-table-column prop="id" label="ID" width="100px"/>
       <el-table-column prop="username" label="账号" width="150px"/>
       <el-table-column prop="nickname" label="姓名"/>
@@ -21,8 +22,8 @@
       </el-table-column>
       <el-table-column prop="phone" label="电话"/>
       <el-table-column prop="operation" label="操作">
-        <el-tag type="primary" size="large">编辑</el-tag>
-        <el-tag type="danger" size="large">删除</el-tag>
+        <el-button type="primary" size="medium" style="margin-right: 5px">编辑</el-button>
+        <el-button type="danger" size="medium">删除</el-button>
       </el-table-column>
     </el-table>
   </el-scrollbar>
