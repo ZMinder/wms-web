@@ -1,13 +1,13 @@
 <template>
   <el-scrollbar>
     <div>
-      <el-input class="nicknameInput" v-model="keywords" placeholder="请输入姓名"
-                :suffix-icon="Search" @keyup.enter.native="loadData()"></el-input>
-      <el-select class="genderSelect" v-model="gender" placeholder="请选择性别">
+      <el-input class="nicknameInput" v-model="fuzzy.nickname" placeholder="请输入姓名"
+                :suffix-icon="Search" @keyup.enter.native="fuzzyLoad()"></el-input>
+      <el-select class="genderSelect" v-model="fuzzy.gender" placeholder="请选择性别">
         <el-option label="男" value="男"></el-option>
         <el-option label="女" value="女"></el-option>
       </el-select>
-      <el-button type="primary" @click="loadData()">查询</el-button>
+      <el-button type="primary" @click="fuzzyLoad()">查询</el-button>
       <el-button type="success" @click="resetQuery()">重置</el-button>
     </div>
     <el-table :data="userData.data" border stripe
@@ -63,35 +63,51 @@ let userData = reactive({
   data: []
 })
 
+let fuzzy = reactive({
+  nickname: null,
+  gender: null,
+  roleId: null
+})
+
 let keywords = ref("")//模糊查询的关键字
 
 let gender = ref("")//根据性别查询
 
 function loadData() {//组件挂载之前从后端获取数据
-  let url = baseURL
-  if (keywords.value != "") {//如果keywords不为空 说明是模糊查询
-    url += "/fuzzy"
-  }
-  if (gender.value == "男" || gender.value == "女") {
-    url += "/gender"
-  }
-  let promise = axios.get(url, {
+  let promise = axios.get(baseURL, {
     params: {
       pageSize: userData.pageSize,
       pageNum: userData.pageNum,
-      keywords: keywords.value,
-      gender: gender.value
     }
   })
   promise.then(response => {
     if (response.data.code == 200) {
       Object.assign(userData, response.data.data)
-      console.log(userData)
+      // console.log(userData)
     } else {
       alert("数据获取失败")
     }
   }).catch(error => {
     console.log(error)
+  })
+}
+
+function fuzzyLoad() {//模糊查询
+  let url = baseURL + "/fuzzy"
+  let promise = axios.post(url, fuzzy, {
+    params: {
+      pageSize: userData.pageSize,
+      pageNum: userData.pageNum
+    }
+  })
+
+  promise.then(response => {
+    if (response.data.code == 200) {
+      Object.assign(userData, response.data.data)
+      console.log(userData)
+    }
+  }).catch(error => {
+    alert(error)
   })
 }
 
@@ -141,8 +157,14 @@ function handleCurrentChange(val) {//处理当前页数改变的时候情况
 }
 
 function resetQuery() {
-  keywords.value = ""
-  gender.value = ""
+  //重置数据
+  fuzzy.nickname = null
+  fuzzy.gender = null
+  fuzzy.roleId = null
+  //重置分页数据
+  userData.pageNum = 1
+  userData.pageSize = 10
+  loadData()
 }
 </script>
 
