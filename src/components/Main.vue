@@ -50,30 +50,43 @@
         style="margin-top: 5px"
     />
     <!--    对话框标签-->
-    <el-dialog v-model="dialogFormVisible" title="添加用户" width="500px" @close="resetForm()">
-      <el-form v-bind:model="user" ref="userForm">
-        <el-form-item prop="username" label="账号" style="width: 300px">
+    <el-dialog v-model="dialogFormVisible" title="添加用户"
+               width="500px" @close="resetForm()">
+      <el-form v-bind:model="user" ref="userForm" v-bind:rules="userRules"
+               label-position="left">
+        <el-form-item prop="username" label="账号"
+                      label-width="70" style="width: 300px">
           <el-input v-model="user.username" placeholder="请输入账号"/>
         </el-form-item>
-        <el-form-item prop="nickname" label="姓名" style="width: 300px">
+        <el-form-item prop="nickname" label="姓名"
+                      label-width="70" style="width: 300px">
           <el-input v-model="user.nickname" placeholder="请输入姓名"/>
         </el-form-item>
-        <el-form-item prop="password" label="密码" style="width: 300px">
+        <el-form-item prop="password" label="密码"
+                      label-width="70" style="width: 300px">
           <el-input v-model="user.password" placeholder="请输入密码" show-password/>
         </el-form-item>
-        <el-form-item prop="age" label="年龄" style="width: 300px">
+        <el-form-item prop="confirmedPassword" label="确认密码"
+                      label-width="70" style="width: 300px">
+          <el-input v-model="user.confirmedPassword" placeholder="请确认密码" show-password/>
+        </el-form-item>
+        <el-form-item prop="age" label="年龄"
+                      label-width="70" style="width: 300px">
           <el-input v-model="user.age" placeholder="请输入年龄"/>
         </el-form-item>
-        <el-form-item prop="gender" label="性别" style="width: 300px">
+        <el-form-item prop="gender" label="性别"
+                      label-width="70" style="width: 300px">
           <el-select v-model="user.gender" placeholder="请选择性别">
             <el-option label="男" value="男"/>
             <el-option label="女" value="女"/>
           </el-select>
         </el-form-item>
-        <el-form-item prop="phone" label="电话" style="width: 300px">
+        <el-form-item prop="phone" label="电话"
+                      label-width="70" style="width: 300px">
           <el-input v-model="user.phone" placeholder="请输入电话"/>
         </el-form-item>
-        <el-form-item prop="role" label="角色" style="width: 300px">
+        <el-form-item prop="roleId" label="角色"
+                      label-width="70" style="width: 300px">
           <el-select v-model="user.roleId" placeholder="请选择角色">
             <el-option label="超级管理员" value="0"/>
             <el-option label="管理员" value="1"/>
@@ -94,22 +107,13 @@ import {nextTick, onBeforeMount, reactive, ref} from 'vue'
 import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 import {ElMessage} from "element-plus";
+import {validateAge, validateConfirm, validateUsername, checkUsernameExist, user, userRules} from "../validate/userForm"
 
 const baseURL = "http://localhost:8090/user"
 
 let dialogFormVisible = ref(false)//处理对话框是否显示
 
 const userForm = ref()//绑定form表单
-
-let user = reactive({
-  username: "",
-  nickname: "",
-  password: "",
-  age: null,
-  gender: "",
-  phone: "",
-  roleId: null
-})
 
 let userData = reactive({
   pageSize: 10,
@@ -171,6 +175,25 @@ onBeforeMount(() => {
   loadData()
 })
 
+function handleSizeChange(val) {//处理每页显示条目数改变的时候
+  userData.pageNum = 1//每页条目数该表的情况下，默认从第一页重新显示
+  loadData()
+}
+
+function handleCurrentChange(val) {//处理当前页数改变的时候情况
+  loadData()
+}
+
+function resetQuery() {
+  //重置数据
+  fuzzy.nickname = null
+  fuzzy.gender = null
+  fuzzy.roleId = null
+  //重置分页数据
+  resetPageData()
+  loadData()
+}
+
 function getRoleType(roleId) {//获取角色tag标签的type
   switch (roleId) {
     case 0:
@@ -202,34 +225,25 @@ function getGenderType(gender) {//获取角色tag标签的type
   }
 }
 
-function handleSizeChange(val) {//处理每页显示条目数改变的时候
-  userData.pageNum = 1//每页条目数该表的情况下，默认从第一页重新显示
-  loadData()
-}
-
-function handleCurrentChange(val) {//处理当前页数改变的时候情况
-  loadData()
-}
-
-function resetQuery() {
-  //重置数据
-  fuzzy.nickname = null
-  fuzzy.gender = null
-  fuzzy.roleId = null
-  //重置分页数据
-  resetPageData()
-  loadData()
+function doAdd() {
+  userForm.value.validate(valid => {
+    if (valid) {
+      doSave()
+    } else {
+      ElMessage.error("表单数据不合法，请检查")
+    }
+  })
 }
 
 function resetForm() {
-  if (userForm) {
+  if (userForm) {//确保userForm存在
     nextTick(() => {//在DOM树更新完后执行
       userForm.value.resetFields()
     })
   }
 }
 
-function doAdd() {
+function doSave() {
   //将数据返回给后端
   let promise = axios.post(baseURL, user);
   promise.then(() => {
