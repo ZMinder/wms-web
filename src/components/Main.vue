@@ -36,7 +36,11 @@
       <el-table-column prop="operation" label="操作">
         <template v-slot="scope">
           <el-button type="primary" size="default" @click="modify(scope.row)">编辑</el-button>
-          <el-button type="danger" size="default">删除</el-button>
+          <el-popconfirm title="确认删除吗？" @confirm="remove(scope.row.username)">
+            <template #reference>
+              <el-button type="danger" size="default">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -285,6 +289,21 @@ function modify(row) {
   Object.assign(user, row)
   user.preUsername = user.username
   dialogFormVisible.value = true
+}
+
+function remove(username) {
+  doRemove(username)
+}
+
+function doRemove(username) {
+  let url = baseURL + "/" + username
+  const promise = axios.delete(url)
+  promise.then(response => {
+    ElMessage.success("删除成功")
+    loadData()
+  }).catch(error => {
+    ElMessage.error("删除失败")
+  })
 }
 
 function saveUser() {//添加用户
