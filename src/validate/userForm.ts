@@ -4,6 +4,8 @@ import {reactive} from "vue";
 let baseURL = "http://localhost:8090/user"
 
 let user = reactive({
+    id: null,
+    preUsername: null,
     username: null,
     nickname: null,
     password: null,
@@ -13,6 +15,9 @@ let user = reactive({
     phone: null,
     roleId: null
 })
+let resetUser = reactive({})
+
+Object.assign(resetUser, user)
 
 let userRules = {
     username: [{validator: validateUsername, trigger: "blur"}],
@@ -42,15 +47,17 @@ async function validateUsername(rule, value, callback) {//验证账号
     if (value.length < 3 || value.length > 20) {
         return callback(new Error("账号长度在3到20个字符"))
     }
-    try {
-        const res = await checkUsernameExist(value)
-        if (res) {
-            return callback(new Error("该账号已被占用"))
+    if (!user.id || value != user.preUsername) {//添加或修改
+        try {
+            const res = await checkUsernameExist(value)
+            if (res) {
+                return callback(new Error("该账号已被占用"))
+            }
+        } catch (error) {
+            alert(error)
         }
-        return callback()
-    } catch (error) {
-        alert(error)
     }
+    return callback()
 }
 
 async function checkUsernameExist(value) {//检查账号是否已被使用
@@ -95,5 +102,5 @@ function validateAge(rule, value, callback) {
 
 export {
     validateAge, validateConfirm, validateUsername, checkUsernameExist,
-    user, userRules
+    user, userRules, resetUser
 }

@@ -34,8 +34,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="operation" label="操作">
-        <el-button type="primary" size="default">编辑</el-button>
-        <el-button type="danger" size="default">删除</el-button>
+        <template v-slot="scope">
+          <el-button type="primary" size="default" @click="modify(scope.row)">编辑</el-button>
+          <el-button type="danger" size="default">删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <!--    分页标签-->
@@ -50,7 +52,7 @@
         style="margin-top: 5px"
     />
     <!--    对话框标签-->
-    <el-dialog v-model="dialogFormVisible" title="添加用户"
+    <el-dialog v-model="dialogFormVisible" title="编辑信息"
                width="500px" @close="resetForm()">
       <el-form v-bind:model="user" ref="userForm" v-bind:rules="userRules"
                label-position="left">
@@ -96,7 +98,7 @@
       </el-form>
       <template #footer>
         <el-button type="primary" @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="success" @click="doAdd()">确认</el-button>
+        <el-button type="success" @click="doAddOrModify()">确认</el-button>
       </template>
     </el-dialog>
   </el-scrollbar>
@@ -107,7 +109,10 @@ import {nextTick, onBeforeMount, reactive, ref} from 'vue'
 import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 import {ElMessage} from "element-plus";
-import {validateAge, validateConfirm, validateUsername, checkUsernameExist, user, userRules} from "../validate/userForm"
+import {
+  validateAge, validateConfirm, validateUsername, checkUsernameExist,
+  user, userRules, resetUser
+} from "../validate/userForm"
 
 const baseURL = "http://localhost:8090/user"
 
@@ -225,10 +230,14 @@ function getGenderType(gender) {//获取角色tag标签的type
   }
 }
 
-function doAdd() {
+function doAddOrModify() {
   userForm.value.validate(valid => {
     if (valid) {
-      doSave()
+      if (!user.id) {//id为空是添加
+        doSave()
+      } else {//修改用户
+        doModify()
+      }
     } else {
       ElMessage.error("表单数据不合法，请检查")
     }
@@ -236,11 +245,8 @@ function doAdd() {
 }
 
 function resetForm() {
-  if (userForm) {//确保userForm存在
-    nextTick(() => {//在DOM树更新完后执行
-      userForm.value.resetFields()
-    })
-  }
+  userForm.value.resetFields()//去除校验
+  Object.assign(user, resetUser)//赋空值
 }
 
 function doSave() {
@@ -257,6 +263,28 @@ function doSave() {
   }).catch(error => {
     ElMessage.error("添加失败")
   })
+}
+
+function doModify() {
+  //将数据返回给后端
+  let promise = axios.put(baseURL, user);
+  promise.then(() => {
+    dialogFormVisible.value = false//关闭对话框
+    ElMessage({
+      message: "修改成功",
+      type: "success"
+    })
+    resetPageData()
+    loadData()
+  }).catch(error => {
+    ElMessage.error("修改失败")
+  })
+}
+
+function modify(row) {
+  Object.assign(user, row)
+  user.preUsername = user.username
+  dialogFormVisible.value = true
 }
 
 function saveUser() {//添加用户
