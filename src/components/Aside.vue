@@ -9,7 +9,7 @@
   >
     <el-tooltip effect="dark" placement="right"
                 content="首页" v-bind:disabled="!collapse.isCollapse">
-      <el-menu-item index="/Home">
+      <el-menu-item index="/home">
         <el-icon>
           <House/>
         </el-icon>
@@ -18,7 +18,7 @@
     </el-tooltip>
     <el-tooltip content="导航一" placement="right"
                 effect="dark" v-bind:disabled="!collapse.isCollapse">
-      <el-menu-item index="/One">
+      <el-menu-item index="/one">
         <el-icon>
           <Discount/>
         </el-icon>
@@ -27,7 +27,7 @@
     </el-tooltip>
     <el-tooltip content="导航二" placement="right"
                 effect="dark" v-bind:disabled="!collapse.isCollapse">
-      <el-menu-item index="/Two">
+      <el-menu-item index="/two">
         <el-icon>
           <Grid/>
         </el-icon>

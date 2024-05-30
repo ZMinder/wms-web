@@ -1,10 +1,10 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
 import Personal from '../components/Personal.vue'
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: [
         {
             path: '/login',
