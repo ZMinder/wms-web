@@ -20,7 +20,7 @@
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 import Main from './Main.vue'
-import {asideCollapse} from '../store/store.js'
+import {asideCollapse} from '../store/store.ts'
 
 let collapse = asideCollapse()
 

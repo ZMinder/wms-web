@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 import {ArrowDownBold, Expand, Fold} from '@element-plus/icons-vue'
-import {asideCollapse} from '../store/store.js'
+import {asideCollapse} from '../store/store.ts'
 
 let collapse = asideCollapse()
 

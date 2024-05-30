@@ -39,7 +39,7 @@
 
 <script lang="js" setup>
 import {Discount, House, Grid} from '@element-plus/icons-vue'
-import {asideCollapse} from '../store/store.js'
+import {asideCollapse} from '../store/store.ts'
 
 let collapse = asideCollapse();
 
