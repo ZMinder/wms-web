@@ -11,7 +11,7 @@
     <div class="welcome-text">
       <span>欢迎来到仓库管理系统</span>
     </div>
-    <span class="username">Tom</span>
+    <span class="username">{{ curUser.nickname }}</span>
     <el-dropdown>
       <el-icon class="drop-icon">
         <ArrowDownBold/>
@@ -29,8 +29,13 @@
 <script lang="ts" setup>
 import {ArrowDownBold, Expand, Fold} from '@element-plus/icons-vue'
 import {asideCollapse} from '../store/store.ts'
+import {useRouter} from 'vue-router'
 
 let collapse = asideCollapse()
+
+let curUser = JSON.parse(sessionStorage.getItem("curUser"))
+
+let router = useRouter()
 
 //个人中心
 function personal() {
@@ -39,7 +44,8 @@ function personal() {
 
 //退出登录
 function logout() {
-  console.log("logout")
+  sessionStorage.removeItem("curUser")
+  router.push("/login")
 }
 
 //折叠侧边栏
