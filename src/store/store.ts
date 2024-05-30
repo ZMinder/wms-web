@@ -37,4 +37,13 @@ const curUser = defineStore({
     }
 })
 
-export {asideCollapse, curUser}
+const baseURL = defineStore({
+    id: "baseURL",
+    state: () => {
+        return {
+            baseURL: "http://localhost:8090/user"
+        }
+    }
+})
+
+export {asideCollapse, curUser, baseURL}

@@ -4,14 +4,16 @@
       <div class="login-content">
         <h1 class="login-title">用户登录</h1>
         <el-form :model="loginForm" label-width="100px"
-                 :rules="rules" ref="loginForm">
-          <el-form-item label="账号" prop="no">
-            <el-input style="width: 200px" type="text" v-model="loginForm.username"
-                      autocomplete="off" size="small"></el-input>
+                 :rules="rules" ref="login">
+          <el-form-item label="账号" prop="username">
+            <el-input style="width: 200px" placeholder="请输入账号"
+                      v-model="loginForm.username" />
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input style="width: 200px" type="password" v-model="loginForm.password"
-                      show-password autocomplete="off" size="small" @keyup.enter.native="confirm"></el-input>
+            <el-input style="width: 200px" type="password"
+                      v-model="loginForm.password"
+                      show-password
+                      @keyup.enter.native="confirm"/>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="confirm">确 定</el-button>
@@ -25,15 +27,39 @@
 
 <script setup lang="ts">
 import {reactive, ref} from "vue";
-import {curUser} from '../store/store.ts'
+import {curUser, baseURL as base} from '../store/store.ts'
+import axios from "axios";
+import {loginForm, rules} from '../validate/userLoginForm'
+import {useRouter} from 'vue-router'
+import {ElMessage} from "element-plus";
 
-let loginForm = reactive({//收集表单数据
-  username: null,
-  password: null
-})
+let baseURL = base().baseURL
 
-function confirm() {
+let router = useRouter()
 
+async function login() {//判断登录是否成功
+  try {
+    let response = await axios.post(baseURL + "/login", loginForm);
+    if (response.data.code == 200) {
+      let user = curUser()
+      Object.assign(user, response.data.data)//将登录的用户数据赋值给curUser
+      return true
+    } else {
+      return false
+    }
+  } catch (error) {
+    alert(error)
+  }
+}
+
+async function confirm() {//确认按钮
+  let res = await login();
+  if (res) {
+    ElMessage.success("登录成功")
+    router.push("/home")
+  } else {
+    ElMessage.error("登录失败")
+  }
 }
 </script>
 

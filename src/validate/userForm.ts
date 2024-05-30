@@ -1,7 +1,6 @@
 import axios from "axios";
 import {reactive} from "vue";
-
-let baseURL = "http://localhost:8090/user"
+import {baseURL as base} from "../store/store";
 
 let user = reactive({
     id: null,
@@ -61,6 +60,7 @@ async function validateUsername(rule, value, callback) {//验证账号
 }
 
 async function checkUsernameExist(value) {//检查账号是否已被使用
+    let baseURL = base().baseURL
     let url = baseURL + "/" + value
     try {
         const response = await axios.get(url)

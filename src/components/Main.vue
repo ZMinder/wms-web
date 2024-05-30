@@ -117,8 +117,9 @@ import {
   validateAge, validateConfirm, validateUsername, checkUsernameExist,
   user, userRules, resetUser
 } from "../validate/userForm"
+import {baseURL as base} from "../store/store";
 
-const baseURL = "http://localhost:8090/user"
+const baseURL = base().baseURL
 
 let dialogFormVisible = ref(false)//处理对话框是否显示
 
