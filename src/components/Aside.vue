@@ -6,6 +6,7 @@
            active-text-color="#ffd04b"
            v-bind:collapse="collapse.isCollapse"
            v-bind:collapse-transition="collapse.isCollapseTransition"
+           router
   >
     <el-tooltip effect="dark" placement="right"
                 content="首页" v-bind:disabled="!collapse.isCollapse">
@@ -16,22 +17,14 @@
         <span slot="title">首页</span>
       </el-menu-item>
     </el-tooltip>
-    <el-tooltip content="导航一" placement="right"
-                effect="dark" v-bind:disabled="!collapse.isCollapse">
-      <el-menu-item index="/one">
-        <el-icon>
-          <Discount/>
+    <el-tooltip v-bind:content=item.menuName placement="right"
+                effect="dark" v-bind:disabled="!collapse.isCollapse"
+                v-for="(item,index) in menu" v-bind:key="index">
+      <el-menu-item v-bind:index=item.menuPath>
+        <el-icon >
+          <component :is="item.menuIcon"></component>
         </el-icon>
-        <span>导航一</span>
-      </el-menu-item>
-    </el-tooltip>
-    <el-tooltip content="导航二" placement="right"
-                effect="dark" v-bind:disabled="!collapse.isCollapse">
-      <el-menu-item index="/two">
-        <el-icon>
-          <Grid/>
-        </el-icon>
-        <span>导航二</span>
+        <span>{{ item.menuName }}</span>
       </el-menu-item>
     </el-tooltip>
   </el-menu>
@@ -40,8 +33,22 @@
 <script lang="js" setup>
 import {Discount, House, Grid} from '@element-plus/icons-vue'
 import {asideCollapse} from '../store/store.ts'
+import {reactive} from "vue";
 
 let collapse = asideCollapse();
+//动态菜单选项
+let menu = reactive([
+  {
+    menuName: "管理员管理",
+    menuPath: "/admin",
+    menuIcon: Discount
+  },
+  {
+    menuName: "用户管理",
+    menuPath: "/user",
+    menuIcon: Grid
+  }
+])
 
 </script>
 

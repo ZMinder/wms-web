@@ -2,6 +2,8 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
 import Personal from '../components/Personal.vue'
+import AdminMange from '../components/admin/AdminMange.vue'
+import UserManage from '../components/user/UserMange.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -19,8 +21,20 @@ const router = createRouter({
             component: Index,
             children: [
                 {
+                    path: '',
+                    redirect: "/personal"
+                },
+                {
                     path: '/personal',
                     component: Personal
+                },
+                {
+                    path: '/admin',
+                    component: AdminMange
+                },
+                {
+                    path: '/user',
+                    component: UserManage
                 }
             ]
         }

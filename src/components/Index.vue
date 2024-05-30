@@ -10,7 +10,7 @@
       </el-header>
 
       <el-main class="layout-main">
-        <router-view></router-view>
+          <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import Aside from './Aside.vue';
 import Header from './Header.vue';
-import { asideCollapse } from '../store/store.ts';
+import {asideCollapse} from '../store/store.ts';
 
 const collapse = asideCollapse();
 </script>

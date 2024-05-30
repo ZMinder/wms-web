@@ -1,5 +1,8 @@
 <template>
-  <div style="text-align: center;background-color: #f1f1f3;height: 100%;padding: 0px;margin: 0px;">
+  <div class="profile-container">
+    <div class="welcome-message">
+      欢迎, {{ user.nickname }}!
+    </div>
     <el-descriptions title="个人中心" :column="2" size="default" border>
       <el-descriptions-item label-width="150px">
         <template #label>
@@ -62,9 +65,21 @@ const user = reactive(JSON.parse(sessionStorage.getItem('curUser') || '{}'));
 </script>
 
 <style scoped>
+.profile-container {
+  text-align: center;
+  background-color: #f1f1f3;
+  height: 100%;
+}
+
+.welcome-message {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
 .el-descriptions {
   width: 90%;
-  margin: 0px auto; /* 居中并增加上下边距 */
+  margin: 20px auto; /* 居中并增加上下边距 */
   background-color: #fff; /* 白色背景，更简洁明亮 */
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); /* 轻微的阴影，增加立体感 */
   border-radius: 10px; /* 圆角边框 */
@@ -91,4 +106,3 @@ const user = reactive(JSON.parse(sessionStorage.getItem('curUser') || '{}'));
   vertical-align: middle; /* 图标垂直居中对齐 */
 }
 </style>
-
