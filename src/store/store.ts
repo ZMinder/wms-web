@@ -28,14 +28,6 @@ const asideCollapse = defineStore({
     }
 })
 
-const curUser = defineStore({
-    id: "curUser",
-    state: () => {
-        return {
-            id: null, username: null, nickname: null, age: null, gender: null, phone: null, roleId: null, isValid: null
-        }
-    }
-})
 
 const baseURL = defineStore({
     id: "baseURL",
@@ -46,4 +38,4 @@ const baseURL = defineStore({
     }
 })
 
-export {asideCollapse, curUser, baseURL}
+export {asideCollapse, baseURL}

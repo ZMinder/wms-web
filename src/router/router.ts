@@ -1,7 +1,6 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
-import {curUser} from '../store/store.js'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -26,7 +25,7 @@ router.beforeEach((to, from, next) => {
     if (to.path == '/login') {//如果是前往登录页面，直接放行
         next()
     } else {//必须验证是否登录，否则禁止放行
-        let user = curUser()
+        let user = JSON.parse(sessionStorage.getItem("curUser"))//存储在sessionStorage中的是json字符串
         if (user.username != null) {//放行
             next()
         } else {

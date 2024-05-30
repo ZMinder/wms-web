@@ -59,7 +59,7 @@
     <el-dialog v-model="dialogFormVisible" title="编辑信息"
                width="500px" @close="resetForm()">
       <el-form v-bind:model="user" ref="userForm" v-bind:rules="userRules"
-               label-position="left">
+               label-position="right">
         <el-form-item prop="username" label="账号"
                       label-width="70" style="width: 300px">
           <el-input v-model="user.username" placeholder="请输入账号"/>
@@ -72,7 +72,7 @@
                       label-width="70" style="width: 300px">
           <el-input v-model="user.password" placeholder="请输入密码" show-password/>
         </el-form-item>
-        <el-form-item prop="confirmedPassword" label="确认密码"
+        <el-form-item v-if="modifyOrSave" prop="confirmedPassword" label="确认密码"
                       label-width="70" style="width: 300px">
           <el-input v-model="user.confirmedPassword" placeholder="请确认密码" show-password/>
         </el-form-item>
@@ -121,6 +121,8 @@ import {baseURL as base} from "../store/store";
 
 const baseURL = base().baseURL
 
+let modifyOrSave = ref()
+
 let dialogFormVisible = ref(false)//处理对话框是否显示
 
 const userForm = ref()//绑定form表单
@@ -143,7 +145,7 @@ function resetPageData() {
   userData.pageNum = 1
 }
 
-function loadData() {//组件挂载之前从后端获取数据
+function pageLoad() {
   let promise = axios.get(baseURL, {
     params: {
       pageSize: userData.pageSize,
@@ -160,6 +162,14 @@ function loadData() {//组件挂载之前从后端获取数据
   }).catch(error => {
     console.log(error)
   })
+}
+
+function loadData() {//组件挂载之前从后端获取数据
+  if (fuzzy.roleId != null || fuzzy.gender != null || fuzzy.nickname != null) {
+    fuzzyLoad()
+  } else {
+    pageLoad()
+  }
 }
 
 function fuzzyLoad() {//模糊查询
@@ -287,6 +297,7 @@ function doModify() {
 }
 
 function modify(row) {
+  modifyOrSave.value = false
   Object.assign(user, row)
   user.preUsername = user.username
   dialogFormVisible.value = true
@@ -309,6 +320,7 @@ function doRemove(username) {
 
 function saveUser() {//添加用户
   dialogFormVisible.value = true
+  modifyOrSave.value = true
 }
 </script>
 

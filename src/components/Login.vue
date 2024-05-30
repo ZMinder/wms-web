@@ -7,11 +7,12 @@
                  :rules="rules" ref="login">
           <el-form-item label="账号" prop="username">
             <el-input style="width: 200px" placeholder="请输入账号"
-                      v-model="loginForm.username" />
+                      v-model="loginForm.username"/>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input style="width: 200px" type="password"
                       v-model="loginForm.password"
+                      placeholder="请输入密码"
                       show-password
                       @keyup.enter.native="confirm"/>
           </el-form-item>
@@ -27,7 +28,7 @@
 
 <script setup lang="ts">
 import {reactive, ref} from "vue";
-import {curUser, baseURL as base} from '../store/store.ts'
+import {baseURL as base} from '../store/store.ts'
 import axios from "axios";
 import {loginForm, rules} from '../validate/userLoginForm'
 import {useRouter} from 'vue-router'
@@ -41,8 +42,7 @@ async function login() {//判断登录是否成功
   try {
     let response = await axios.post(baseURL + "/login", loginForm);
     if (response.data.code == 200) {
-      let user = curUser()
-      Object.assign(user, response.data.data)//将登录的用户数据赋值给curUser
+      sessionStorage.setItem("curUser", JSON.stringify(response.data.data))//将登录的用户数据赋值给curUser
       return true
     } else {
       return false
