@@ -6,11 +6,11 @@
         <el-form :model="loginForm" label-width="100px"
                  :rules="rules" ref="login">
           <el-form-item label="账号" prop="username">
-            <el-input style="width: 200px" placeholder="请输入账号"
+            <el-input class="input-field" placeholder="请输入账号"
                       v-model="loginForm.username"/>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input style="width: 200px" type="password"
+            <el-input class="input-field" type="password"
                       v-model="loginForm.password"
                       placeholder="请输入密码"
                       show-password
@@ -27,7 +27,6 @@
 
 
 <script setup lang="ts">
-import {reactive, ref} from "vue";
 import {baseURL as base} from '../store/store.ts'
 import axios from "axios";
 import {loginForm, rules} from '../validate/userLoginForm'
@@ -65,35 +64,50 @@ async function confirm() {//确认按钮
 
 <style scoped>
 .loginBody {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #B3C0D1;
+  margin: -8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  font-family: 'Arial', sans-serif;
 }
 
 .loginDiv {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -200px;
-  margin-left: -250px;
-  width: 450px;
-  height: 330px;
-  background: #fff;
-  border-radius: 5%;
 
+  width: 400px;
+  padding: 40px 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.loginDiv:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
 }
 
 .login-title {
-  margin: 20px 0;
+  margin-bottom: 25px;
   text-align: center;
+  font-size: 24px;
+  color: #333;
 }
 
 .login-content {
-  width: 400px;
-  height: 250px;
-  position: absolute;
-  top: 25px;
-  left: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+el-form-item {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
 }
 </style>
