@@ -30,6 +30,7 @@
 import {ArrowDownBold, Expand, Fold} from '@element-plus/icons-vue'
 import {asideCollapse} from '../store/store.ts'
 import {useRouter} from 'vue-router'
+import {onMounted} from "vue"
 
 let collapse = asideCollapse()
 
@@ -39,8 +40,12 @@ let router = useRouter()
 
 //个人中心
 function personal() {
-  console.log("personal")
+  router.push("/personal")
 }
+
+onMounted(()=>{
+  router.push("/personal")
+})
 
 //退出登录
 function logout() {

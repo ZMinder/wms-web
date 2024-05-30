@@ -10,7 +10,7 @@
       </el-header>
 
       <el-main>
-        <Main></Main>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
