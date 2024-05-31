@@ -33,12 +33,15 @@ import {loginForm, rules} from '../validate/userLoginForm'
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
 import routers from '../router/router'
+import {ref} from "vue";
 
 let baseURL = base().baseURL
 
 let router = useRouter()
 
-async function login() {//判断登录是否成功
+let login = ref()
+
+async function doLogin() {//判断登录是否成功
   try {
     let response = await axios.post(baseURL + "/login", loginForm);
     if (response.data.code == 200) {
@@ -54,14 +57,16 @@ async function login() {//判断登录是否成功
   }
 }
 
-async function confirm() {//确认按钮
-  let res = await login();
-  if (res) {
-    ElMessage.success("登录成功")
-    router.push("/home")
-  } else {
-    ElMessage.error("登录失败")
-  }
+function confirm() {//确认按钮
+  login.value.validate(async valid => {
+    let res = await doLogin();
+    if (res) {
+      ElMessage.success("登录成功")
+      router.push("/home")
+    } else {
+      ElMessage.error("登录失败")
+    }
+  })
 }
 </script>
 

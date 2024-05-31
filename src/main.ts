@@ -9,10 +9,7 @@ import loadMenu from './utils/loadMenuUtil'
 const app = createApp(App)
 const pinia = createPinia();
 
-async function boot() {
-    await loadMenu()
-    app.use(pinia)
-    app.use(ElementPlus)
-    app.use(router)
-    app.mount('#app')
-}
+app.use(pinia)
+app.use(ElementPlus)
+app.use(router)
+app.mount('#app')

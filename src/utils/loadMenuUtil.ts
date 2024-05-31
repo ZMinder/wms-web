@@ -24,4 +24,4 @@ function loadMenu() {
     })
 }
 
-export default loadMenu()
+export default loadMenu
