@@ -20,7 +20,7 @@
     <el-tooltip v-bind:content=item.menuName placement="right"
                 effect="dark" v-bind:disabled="!collapse.isCollapse"
                 v-for="(item,index) in menu" v-bind:key="index">
-      <el-menu-item v-bind:index=item.menuPath>
+      <el-menu-item v-bind:index=item.menuIndex>
         <el-icon>
           <component :is="getIconComponent(item.menuIcon)"/>
         </el-icon>
@@ -33,27 +33,23 @@
 <script lang="js" setup>
 import * as Icons from '@element-plus/icons-vue'
 import {asideCollapse} from '../store/store.ts'
-import {reactive} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue"
 
 let collapse = asideCollapse();
-//动态菜单选项
-let menu = reactive([
-  {
-    menuName: "管理员管理",
-    menuPath: "/admin",
-    menuIcon: "Discount"
-  },
-  {
-    menuName: "用户管理",
-    menuPath: "/user",
-    menuIcon: "Grid"
-  }
-])
+
+let menu = ref([])
 
 function getIconComponent(iconName) {//根据图标名称获取组件
-  console.log(Icons[iconName])
   return Icons[iconName];
 }
+
+onBeforeMount(() => {
+  const menuStore = JSON.parse(sessionStorage.getItem("curMenu"))
+  if (menuStore) {
+    menu.value = menuStore
+    // console.log(menu.value)
+  }
+})
 
 </script>
 

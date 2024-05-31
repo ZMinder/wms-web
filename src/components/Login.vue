@@ -32,16 +32,33 @@ import axios from "axios";
 import {loginForm, rules} from '../validate/userLoginForm'
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
+import routers from '../router/router'
 
 let baseURL = base().baseURL
 
 let router = useRouter()
 
+function setRouter(menuList) {
+  // console.log(menuList)
+  for (let menu of menuList) {
+    let child = {
+      path: "/" + menu.menuIndex,
+      name: menu.menuName,
+      component: () => import("../components/" + menu.menuComponent)
+    }
+    console.log(child)
+    routers.addRoute("home", child)
+  }
+  // console.log(routers)
+}
+
 async function login() {//判断登录是否成功
   try {
     let response = await axios.post(baseURL + "/login", loginForm);
     if (response.data.code == 200) {
-      sessionStorage.setItem("curUser", JSON.stringify(response.data.data))//将登录的用户数据赋值给curUser
+      sessionStorage.setItem("curUser", JSON.stringify(response.data.data.user))//将登录的用户数据赋值给curUser
+      sessionStorage.setItem("curMenu", JSON.stringify(response.data.data.menu))//设置动态菜单
+      setRouter(response.data.data.menu)//动态生成路由
       return true
     } else {
       return false

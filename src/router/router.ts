@@ -2,14 +2,13 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
 import Personal from '../components/Personal.vue'
-import AdminMange from '../components/admin/AdminMange.vue'
-import UserManage from '../components/user/UserMange.vue'
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/login',
+            name: 'login',
             component: Login
         },
         {
@@ -18,23 +17,18 @@ const router = createRouter({
         },
         {
             path: '/home',
+            name: 'home',
             component: Index,
             children: [
                 {
                     path: '',
+                    name: 'default',
                     redirect: "/personal"
                 },
                 {
                     path: '/personal',
+                    name: 'personal',
                     component: Personal
-                },
-                {
-                    path: '/admin',
-                    component: AdminMange
-                },
-                {
-                    path: '/user',
-                    component: UserManage
                 }
             ]
         }
