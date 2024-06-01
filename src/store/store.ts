@@ -33,7 +33,7 @@ const baseURL = defineStore({
     id: "baseURL",
     state: () => {
         return {
-            baseURL: "http://localhost:8090/user"
+            baseURL: "http://localhost:8090/"
         }
     }
 })

@@ -108,7 +108,7 @@ import {ElMessage} from "element-plus";
 import {user, userRules, resetUser} from "../../validate/userForm"
 import {baseURL as base} from "../../store/store";
 
-const baseURL = base().baseURL
+const baseURL = base().baseURL + "user"
 
 let modifyOrSave = ref()
 

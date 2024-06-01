@@ -35,7 +35,7 @@ import {ElMessage} from "element-plus";
 import {ref} from "vue"
 import {setRouter}from '../utils/loadMenuUtil'
 
-let baseURL = base().baseURL
+let baseURL = base().baseURL + "user"
 
 let router = useRouter()
 
