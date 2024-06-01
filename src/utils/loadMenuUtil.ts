@@ -6,9 +6,8 @@ export function setRouter(menuList) {
         let child = {
             path: "/" + menu.menuIndex,
             name: menu.menuName,
-            component: () => import("../components/" + menu.menuComponent)
+            component: () => import("../components/" + menu.menuComponent + ".vue")
         }
-        // console.log(child)
         routers.addRoute("home", child)
     }
 }
