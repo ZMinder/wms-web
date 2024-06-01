@@ -2,7 +2,6 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/Index.vue'
 import Personal from '../components/Personal.vue'
-import loadMenu from "../utils/loadMenuUtil";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -36,7 +35,6 @@ const router = createRouter({
     ]
 })
 
-let isLoadMenu = false
 
 //路由前置守卫
 router.beforeEach(async (to, from, next) => {
@@ -45,8 +43,6 @@ router.beforeEach(async (to, from, next) => {
     } else {//必须验证是否登录，否则禁止放行
         let user = JSON.parse(sessionStorage.getItem("curUser"))//存储在sessionStorage中的是json字符串
         if (user.username != null) {//放行
-            await loadMenu()
-            // isLoadMenu = true
             next()
         } else {
             next("/login")

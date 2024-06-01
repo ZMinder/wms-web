@@ -32,8 +32,8 @@ import axios from "axios";
 import {loginForm, rules} from '../validate/userLoginForm'
 import {useRouter} from 'vue-router'
 import {ElMessage} from "element-plus";
-import routers from '../router/router'
-import {ref} from "vue";
+import {ref} from "vue"
+import {setRouter}from '../utils/loadMenuUtil'
 
 let baseURL = base().baseURL
 
@@ -47,7 +47,6 @@ async function doLogin() {//判断登录是否成功
     if (response.data.code == 200) {
       sessionStorage.setItem("curUser", JSON.stringify(response.data.data.user))//将登录的用户数据赋值给curUser
       sessionStorage.setItem("curMenu", JSON.stringify(response.data.data.menu))//设置动态菜单
-      // setRouter(response.data.data.menu)//动态生成路由
       return true
     } else {
       return false

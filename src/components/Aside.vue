@@ -33,7 +33,7 @@
 <script lang="js" setup>
 import * as Icons from '@element-plus/icons-vue'
 import {asideCollapse} from '../store/store.ts'
-import {onBeforeMount, onMounted, ref} from "vue"
+import {onBeforeMount, ref} from "vue"
 
 let collapse = asideCollapse();
 
@@ -47,7 +47,6 @@ onBeforeMount(() => {
   const menuStore = JSON.parse(sessionStorage.getItem("curMenu"))
   if (menuStore) {
     menu.value = menuStore
-    // console.log(menu.value)
   }
 })
 

@@ -45,6 +45,7 @@ function personal() {
 //退出登录
 function logout() {
   sessionStorage.removeItem("curUser")
+  sessionStorage.removeItem("curMenu")
   router.push("/login")
 }
 
