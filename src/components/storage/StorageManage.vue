@@ -1,13 +1,18 @@
 <template>
   <el-scrollbar>
     <div>
-      <el-input class="StorageNameInput" v-model="storageData.storageName" placeholder="请输入仓库名"
-                :suffix-icon="Search" @keyup.enter.native="queryByStorageName()"></el-input>
+      <el-input class="StorageNameInput"
+                v-model="storageData.storageName"
+                placeholder="请输入仓库名"
+                :suffix-icon="Search"
+                @keyup.enter.native="queryByStorageName()"></el-input>
       <el-button type="primary" @click="queryByStorageName()">查询</el-button>
       <el-button type="success" @click="resetQuery()">重置</el-button>
       <el-button type="primary" @click="saveStorage()">添加仓库</el-button>
     </div>
-    <el-table :data="storageData.data" border stripe
+    <el-table :data="storageData.data"
+              border
+              stripe
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
               :cell-style="{textAlign:'center'}">
       <el-table-column prop="id" label="ID" width="100px"/>
@@ -38,17 +43,26 @@
     <!--    对话框标签-->
     <el-dialog v-model="dialogFormVisible" title="编辑信息"
                width="500px" @close="resetForm()">
-      <el-form v-bind:model="storageForm" ref="form" v-bind:rules="rules"
-               label-position="right">
-        <el-form-item prop="storageName" label="仓库名"
-                      label-width="70" style="width: 300px">
+      <el-form v-bind:model="storageForm"
+               ref="form"
+               v-bind:rules="rules"
+               label-position="right"
+               @submit.native.prevent>
+        <el-form-item prop="storageName"
+                      label="仓库名"
+                      label-width="70"
+                      style="width: 300px">
           <el-input v-model="storageForm.storageName"
                     v-bind:disabled="disableStorageNameInput"
                     placeholder="请输入仓库名"/>
         </el-form-item>
-        <el-form-item prop="storageRemark" label="备注"
-                      label-width="70" style="width: 300px">
-          <el-input v-model="storageForm.storageRemark" type="textarea" placeholder="请输入备注"/>
+        <el-form-item prop="storageRemark"
+                      label="备注"
+                      label-width="70"
+                      style="width: 300px">
+          <el-input v-model="storageForm.storageRemark"
+                    type="textarea"
+                    placeholder="请输入备注"/>
         </el-form-item>
       </el-form>
       <template #footer>

@@ -51,7 +51,8 @@
       <el-form v-bind:model="goodsTypeForm"
                ref="form"
                v-bind:rules="rules"
-               label-position="right">
+               label-position="right"
+               @submit.native.prevent>
         <el-form-item prop="goodsTypeName" label="分类名"
                       label-width="70" style="width: 300px">
           <el-input v-model="goodsTypeForm.goodsTypeName"
