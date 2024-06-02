@@ -2,7 +2,7 @@
   <el-scrollbar>
     <div>
       <el-input class="goodsTypeNameInput"
-                v-model="goodsTypeData.goodsTypeName"
+                v-model="goodsTypeData.goodsName"
                 placeholder="请输入分类名"
                 :suffix-icon="Search"
                 @keyup.enter.native="queryByGoodsTypeName()"></el-input>
@@ -95,7 +95,7 @@ let disableGoodsTypeNameInput = ref(false)//控制仓库名在编辑时禁止修
 let goodsTypeData = reactive({
   pageSize: 10,
   pageNum: 1,
-  goodsTypeName: "",
+  goodsName: "",
   total: 5,
   data: []
 })
@@ -110,7 +110,7 @@ function loadData() {//组件挂载之前从后端获取数据
     params: {
       pageSize: goodsTypeData.pageSize,
       pageNum: goodsTypeData.pageNum,
-      storageName: goodsTypeData.goodsTypeName
+      storageName: goodsTypeData.goodsName
     }
   })
 
