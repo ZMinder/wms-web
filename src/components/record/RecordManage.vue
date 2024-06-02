@@ -40,7 +40,7 @@
       <el-table-column prop="goodsName" label="物品名称" width="150px"/>
       <el-table-column prop="storageName" label="所属仓库"/>
       <el-table-column prop="goodsTypeName" label="所属分类"/>
-      <el-table-column prop="operatorNickname" label="操作人"/>
+      <el-table-column prop="operatorNickname" label="申请人"/>
       <el-table-column prop="licensorNickname" label="许可人"/>
       <el-table-column prop="recordType" label="操作"/>
       <el-table-column prop="goodsCount" label="物品数量"/>

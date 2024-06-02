@@ -42,7 +42,7 @@ let rules = {
 }
 
 async function validateGoodsNameAndStorageAndType(rule, value, callback) {//验证账号
-    if (!value) {//未输入账号
+    if (!value) {//未选择分类
         return callback(new Error('请选择物品所属分类'))
     }
     if (!goodsForm.goodsName || !goodsForm.goodsStorage) {

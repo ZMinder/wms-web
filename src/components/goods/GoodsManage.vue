@@ -25,6 +25,8 @@
       <el-button type="primary" @click="fuzzyQuery()">查询</el-button>
       <el-button type="success" @click="resetQuery()">重置</el-button>
       <el-button type="primary" @click="saveGoods()">添加物品</el-button>
+      <el-button type="primary" @click="importGoods()">入库</el-button>
+      <el-button type="primary" @click="exportGoods()">出库</el-button>
     </div>
     <el-table :data="goodsData.data"
               border
@@ -124,6 +126,55 @@
         <el-button type="success" @click="doAddOrModify()">确认</el-button>
       </template>
     </el-dialog>
+<!--    出入库记录对话框-->
+    <el-dialog v-model="recordDialogVisiable"
+               title="出入库"
+               width="500px" @close="resetRecordForm()">
+      <el-form v-bind:model="recordForm"
+               ref="form"
+               v-bind:rules="recordRules"
+               label-width="80"
+               label-position="right"
+               @submit.native.prevent>
+        <el-form-item prop="goodsId"
+                      label="物品名称"
+                      style="width: 300px">
+          <el-input v-model="curGoods.goodsName"
+                    disabled/>
+        </el-form-item>
+        <el-form-item prop="operatorId"
+                      label="申请人"
+                      style="width: 300px">
+<!--          内嵌一个组件-->
+        </el-form-item>
+        <el-form-item prop="recordType"
+                      label="出库/入库"
+                      style="width: 300px">
+          <el-select v-model="recordForm.recordType"
+                     placeholder="请选择出库/入库">
+            <el-option label="出库" value="出库"/>
+            <el-option label="入库" value="入库"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="goodsCount"
+                      label="出库/入库数量"
+                      style="width: 300px">
+          <el-input v-model="recordForm.goodsCount"
+                    placeholder="请输入物品数量"/>
+        </el-form-item>
+        <el-form-item prop="recordRemark"
+                      label="备注"
+                      style="width: 300px">
+          <el-input v-model="recordForm.recordRemark"
+                    type="textarea"
+                    placeholder="请输入备注"/>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="success" @click="saveRecord()">确认</el-button>
+      </template>
+    </el-dialog>
   </el-scrollbar>
 </template>
 
@@ -134,6 +185,8 @@ import axios from "axios"
 import {ElMessage} from "element-plus";
 import {baseURL as base} from "../../store/store";
 import {goodsForm, resetGoods, rules, preGoods} from "../../validate/goodsForm";
+import {recordForm,resetRecord,recordRules} from "../../validate/recordForm";
+import {curGoods,curOperator} from "../../store/recordStore";
 
 const baseURL = base().baseURL + "goods"
 
