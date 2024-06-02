@@ -185,7 +185,7 @@ function doModify() {
 
 function modify(row) {
   Object.assign(storageForm, row)
-  disableStorageNameInput = true
+  disableStorageNameInput.value = true
   dialogFormVisible.value = true
 }
 
@@ -206,7 +206,7 @@ function doRemove(storageName) {
 
 function saveStorage() {//添加仓库
   dialogFormVisible.value = true
-  disableStorageNameInput = false
+  disableStorageNameInput.value = false
 }
 </script>
 

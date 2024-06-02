@@ -42,6 +42,7 @@
         @current-change="handleCurrentChange"
         style="margin-top: 5px"
     />
+    {{goodsTypeForm.id }}
     <!--    对话框标签-->
     <el-dialog v-model="dialogFormVisible"
                title="编辑信息"
@@ -88,7 +89,7 @@ let dialogFormVisible = ref(false)//处理对话框是否显示
 
 const form = ref()//绑定form表单
 
-let disableGoodsTypeNameInput = ref()//控制仓库名在编辑时禁止修改
+let disableGoodsTypeNameInput = ref(false)//控制仓库名在编辑时禁止修改
 
 let goodsTypeData = reactive({
   pageSize: 10,
@@ -200,7 +201,7 @@ function doModify() {
 
 function modify(row) {
   Object.assign(goodsTypeForm, row)
-  disableGoodsTypeNameInput = true
+  disableGoodsTypeNameInput.value = true
   dialogFormVisible.value = true
 }
 
@@ -221,7 +222,7 @@ function doRemove(goodsTypeName) {
 
 function saveGoodsType() {//添加物品分类
   dialogFormVisible.value = true
-  disableGoodsTypeNameInput = false
+  disableGoodsTypeNameInput.value = false
 }
 </script>
 
