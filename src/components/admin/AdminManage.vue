@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
     <div>
-      <el-input class="nicknameInput" v-model="fuzzy.nickname" placeholder="请输入姓名"
+      <el-input class="goodsTypeNameInput" v-model="fuzzy.nickname" placeholder="请输入姓名"
                 :suffix-icon="Search" @keyup.enter.native="fuzzyLoad()"></el-input>
       <el-select class="genderSelect" v-model="fuzzy.gender" placeholder="请选择性别">
         <el-option label="男" value="男"></el-option>
@@ -290,7 +290,7 @@ function saveUser() {//添加用户
 </script>
 
 <style scoped>
-.nicknameInput {
+.goodsTypeNameInput {
   margin: 5px;
   width: 200px;
 }

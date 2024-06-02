@@ -19,7 +19,7 @@ let rules = {
         {validator: validateStorageName, trigger: "blur"}
     ],
     storageRemark: [
-        {required: true, message: "请输入密码", trigger: "blur"}
+        {required: true, message: "请输入备注", trigger: "blur"}
     ]
 }
 
