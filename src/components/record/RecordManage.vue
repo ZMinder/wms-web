@@ -12,7 +12,7 @@
         <el-option v-for="(item,index) in storageData"
                    v-bind:key="index"
                    v-bind:label="item.storageName"
-                   v-bind:value="item.id"/>
+                   v-bind:value="item.storageName"/>
       </el-select>
       <el-select class="select"
                  v-model="fuzzy.goodsTypeName"
@@ -20,7 +20,7 @@
         <el-option v-for="(item,index) in goodsTypeData"
                    v-bind:key="index"
                    v-bind:label="item.goodsTypeName"
-                   v-bind:value="item.id"/>
+                   v-bind:value="item.goodsTypeName"/>
       </el-select>
       <el-select class="select"
                  v-model="fuzzy.recordType"
@@ -30,7 +30,6 @@
       </el-select>
       <el-button type="primary" @click="fuzzyQuery()">查询</el-button>
       <el-button type="success" @click="resetQuery()">重置</el-button>
-      <el-button type="primary" @click="saveGoods()">添加物品</el-button>
     </div>
     <el-table :data="recordData.data"
               border
@@ -77,12 +76,12 @@ let recordData = reactive({
   data: []
 })
 
-let fuzzy = {
+let fuzzy = reactive({
   goodsName: null,
   storageName: null,
   goodsTypeName: null,
   recordType: null
-}
+})
 
 let storageData = ref([])//存储仓库数据
 
@@ -130,7 +129,7 @@ function loadRecordData() {
 
   promise.then(response => {
     if (response.data.code == 200) {
-      Object.assign(recordData.data, response.data.data)
+      Object.assign(recordData, response.data.data)
     }
   }).catch(error => {
     alert(error)
