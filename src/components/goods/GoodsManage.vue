@@ -31,6 +31,7 @@
     <el-table :data="goodsData.data"
               border
               stripe
+              ref="singleTable"
               highlight-current-row
               @current-change="handleGoodsToRecord"
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
@@ -192,6 +193,7 @@ import {baseURL as base} from "../../store/store";
 import {goodsForm, preGoods, resetGoods, rules} from "../../validate/goodsForm";
 import {
   closeInnerDialog,
+  confirmOperator,
   exportGoods,
   importGoods,
   innerDialogVisible,
@@ -199,9 +201,9 @@ import {
   recordForm,
   recordFormRef,
   recordRules,
-  selectOperator,
   resetRecordForm,
-  confirmOperator
+  selectOperator,
+  singleTable
 } from "../../validate/recordForm";
 import {curGoods, realOperator} from "../../store/recordStore";
 import UserSelect from "./UserSelect.vue";
@@ -245,7 +247,6 @@ function loadStorageData() {
   promise.then(response => {
     if (response.data.code == 200) {
       Object.assign(storageData.value, response.data.data)
-      console.log(storageData.value)
     }
   }).catch(error => {
     alert(error)
@@ -419,23 +420,27 @@ function doModify() {
 
 //record相关
 function handleGoodsToRecord(curRow) {//goods
-  goods.id = curRow.id
-  goods.goodsName = curRow.goodsName
-  goods.goodsCount = curRow.goodsCount
+  if (curRow) {
+    goods.id = curRow.id
+    goods.goodsName = curRow.goodsName
+    goods.goodsCount = curRow.goodsCount
+  }
 }
 
 function saveRecord() {//保存record
   let url = base().baseURL + "record"
-  let user = sessionStorage.getItem("curUser");
+  let user = JSON.parse(sessionStorage.getItem("curUser"))
   recordForm.goodsId = goods.id
+  recordForm.operatorId = operator.id
   recordForm.licensorId = user.id
   //operationTime交给后台获取
   let promise = axios.post(url, recordForm)
 
   promise.then(response => {
     if (response.data.code == 200) {
-      console.log(response.data.data)
+      recordDialogVisible.value = false
       ElMessage.success("记录添加成功")
+      loadGoodsData()
     }
   }).catch(error => {
     alert(error)

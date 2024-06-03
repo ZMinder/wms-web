@@ -8,6 +8,8 @@ let innerDialogVisible = ref()
 
 let recordFormRef = ref()
 
+let singleTable = ref()
+
 let goods = curGoods()
 
 let unDetermined = curOperator()
@@ -91,6 +93,7 @@ function confirmOperator() {
 }
 
 function resetRecordForm() {
+    singleTable.value.setCurrentRow(undefined)//取消选中行
     recordFormRef.value.resetFields()
     Object.assign(recordForm, resetRecord)
     //清除curGoods和curOperator
@@ -105,5 +108,5 @@ export {
     recordForm, resetRecord, recordRules, innerDialogVisible,
     recordFormRef, recordDialogVisible, resetRecordForm,
     importGoods, exportGoods, selectOperator, closeInnerDialog,
-    confirmOperator
+    confirmOperator, singleTable
 }

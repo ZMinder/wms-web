@@ -61,7 +61,7 @@ import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 import {user} from "../../validate/userForm"
 import {baseURL as base} from "../../store/store"
-import {getRoleMsg, getRoleType, getGenderType} from "../../utils/userTableMessage";
+import {getGenderType, getRoleMsg, getRoleType} from "../../utils/userTableMessage";
 import {curOperator} from "../../store/recordStore";
 
 const baseURL = base().baseURL + "user"
@@ -102,7 +102,6 @@ function fuzzyLoad() {//模糊查询
   promise.then(response => {
     if (response.data.code == 200) {
       Object.assign(userData, response.data.data)
-      console.log(userData)
     }
   }).catch(error => {
     alert(error)
@@ -134,7 +133,6 @@ function resetQuery() {
 function selectOperator(curRow) {
   operator.id = curRow.id
   operator.nickname = curRow.nickname
-  console.log(operator.nickname)
 }
 </script>
 
