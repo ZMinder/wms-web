@@ -80,7 +80,8 @@ let fuzzy = reactive({
   goodsName: null,
   storageName: null,
   goodsTypeName: null,
-  recordType: null
+  recordType: null,
+  roleId: null
 })
 
 let storageData = ref([])//存储仓库数据
