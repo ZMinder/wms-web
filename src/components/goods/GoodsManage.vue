@@ -31,6 +31,8 @@
     <el-table :data="goodsData.data"
               border
               stripe
+              highlight-current-row
+              @current-change="handleGoodsToRecord"
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
               :cell-style="{textAlign:'center'}">
       <el-table-column prop="id" label="ID" width="100px"/>
@@ -126,12 +128,23 @@
         <el-button type="success" @click="doAddOrModify()">确认</el-button>
       </template>
     </el-dialog>
-<!--    出入库记录对话框-->
-    <el-dialog v-model="recordDialogVisiable"
+    <!--    出入库记录对话框-->
+    <el-dialog v-model="recordDialogVisible"
                title="出入库"
                width="500px" @close="resetRecordForm()">
+      <!--      内嵌一个dialog 用于用户选择-->
+      <el-dialog v-model="innerDialogVisible"
+                 title="申请人选择"
+                 width="75%"
+                 append-to-body>
+        <UserSelect></UserSelect>
+        <template #footer>
+          <el-button type="primary" @click="closeInnerDialog()">取消</el-button>
+          <el-button type="success" @click="confirmOperator()">确认</el-button>
+        </template>
+      </el-dialog>
       <el-form v-bind:model="recordForm"
-               ref="form"
+               ref="recordFormRef"
                v-bind:rules="recordRules"
                label-width="80"
                label-position="right"
@@ -139,25 +152,17 @@
         <el-form-item prop="goodsId"
                       label="物品名称"
                       style="width: 300px">
-          <el-input v-model="curGoods.goodsName"
-                    disabled/>
+          <el-input v-bind:placeholder="goods.goodsName"
+          />
         </el-form-item>
         <el-form-item prop="operatorId"
                       label="申请人"
                       style="width: 300px">
-<!--          内嵌一个组件-->
-        </el-form-item>
-        <el-form-item prop="recordType"
-                      label="出库/入库"
-                      style="width: 300px">
-          <el-select v-model="recordForm.recordType"
-                     placeholder="请选择出库/入库">
-            <el-option label="出库" value="出库"/>
-            <el-option label="入库" value="入库"/>
-          </el-select>
+          <el-input v-bind:placeholder="operator.nickname"
+                    @click="selectOperator"/>
         </el-form-item>
         <el-form-item prop="goodsCount"
-                      label="出库/入库数量"
+                      label="数量"
                       style="width: 300px">
           <el-input v-model="recordForm.goodsCount"
                     placeholder="请输入物品数量"/>
@@ -171,7 +176,7 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button type="primary" @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="recordDialogVisible = false">取消</el-button>
         <el-button type="success" @click="saveRecord()">确认</el-button>
       </template>
     </el-dialog>
@@ -184,9 +189,22 @@ import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 import {ElMessage} from "element-plus";
 import {baseURL as base} from "../../store/store";
-import {goodsForm, resetGoods, rules, preGoods} from "../../validate/goodsForm";
-import {recordForm,resetRecord,recordRules} from "../../validate/recordForm";
-import {curGoods,curOperator} from "../../store/recordStore";
+import {goodsForm, preGoods, resetGoods, rules} from "../../validate/goodsForm";
+import {
+  closeInnerDialog,
+  exportGoods,
+  importGoods,
+  innerDialogVisible,
+  recordDialogVisible,
+  recordForm,
+  recordFormRef,
+  recordRules,
+  selectOperator,
+  resetRecordForm,
+  confirmOperator
+} from "../../validate/recordForm";
+import {curGoods, realOperator} from "../../store/recordStore";
+import UserSelect from "./UserSelect.vue";
 
 const baseURL = base().baseURL + "goods"
 
@@ -209,6 +227,10 @@ let goodsData = reactive({
 let storageData = ref([])//存储仓库数据
 
 let goodsTypeData = ref([])//存储物品分类数据
+
+let goods = curGoods()
+
+let operator = realOperator()
 
 async function loadData() {//组件挂载之前从后端获取数据
   await loadStorageData()
@@ -392,6 +414,31 @@ function doModify() {
     loadGoodsData()
   }).catch(error => {
     ElMessage.error("修改失败")
+  })
+}
+
+//record相关
+function handleGoodsToRecord(curRow) {//goods
+  goods.id = curRow.id
+  goods.goodsName = curRow.goodsName
+  goods.goodsCount = curRow.goodsCount
+}
+
+function saveRecord() {//保存record
+  let url = base().baseURL + "record"
+  let user = sessionStorage.getItem("curUser");
+  recordForm.goodsId = goods.id
+  recordForm.licensorId = user.id
+  //operationTime交给后台获取
+  let promise = axios.post(url, recordForm)
+
+  promise.then(response => {
+    if (response.data.code == 200) {
+      console.log(response.data.data)
+      ElMessage.success("记录添加成功")
+    }
+  }).catch(error => {
+    alert(error)
   })
 }
 </script>

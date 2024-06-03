@@ -21,4 +21,14 @@ const curOperator = defineStore({
     }
 })
 
-export {curGoods, curOperator}
+const realOperator = defineStore({
+    id: "realOperator",
+    state: () => {
+        return {
+            id: null,
+            nickname: null
+        }
+    }
+})
+
+export {curGoods, realOperator, curOperator}
