@@ -24,9 +24,15 @@
       </el-select>
       <el-button type="primary" @click="fuzzyQuery()">查询</el-button>
       <el-button type="success" @click="resetQuery()">重置</el-button>
-      <el-button type="primary" @click="saveGoods()">添加物品</el-button>
-      <el-button type="primary" @click="importGoods()">入库</el-button>
-      <el-button type="primary" @click="exportGoods()">出库</el-button>
+      <el-button type="primary" @click="saveGoods()"
+                 v-if="user.roleId != 2">添加物品
+      </el-button>
+      <el-button type="primary" @click="importGoods()"
+                 v-if="user.roleId != 2">入库
+      </el-button>
+      <el-button type="primary" @click="exportGoods()"
+                 v-if="user.roleId != 2">出库
+      </el-button>
     </div>
     <el-table :data="goodsData.data"
               border
@@ -50,7 +56,8 @@
       </el-table-column>
       <el-table-column prop="goodsCount" label="物品数量" width="150px"/>
       <el-table-column prop="goodsRemark" label="备注"/>
-      <el-table-column prop="operation" label="操作">
+      <el-table-column prop="operation" label="操作"
+                       v-if="user.roleId != 2">
         <template v-slot="scope">
           <el-button type="primary" size="default" @click="modify(scope.row)">编辑</el-button>
           <el-popconfirm title="确认删除吗？" @confirm="remove(scope.row.id)">
@@ -213,6 +220,8 @@ const baseURL = base().baseURL + "goods"
 let dialogFormVisible = ref(false)//处理对话框是否显示
 
 const form = ref()//绑定form表单
+
+let user = JSON.parse(sessionStorage.getItem("curUser"))
 
 let goodsData = reactive({
   pageSize: 10,
@@ -429,7 +438,6 @@ function handleGoodsToRecord(curRow) {//goods
 
 function saveRecord() {//保存record
   let url = base().baseURL + "record"
-  let user = JSON.parse(sessionStorage.getItem("curUser"))
   recordForm.goodsId = goods.id
   recordForm.operatorId = operator.id
   recordForm.licensorId = user.id

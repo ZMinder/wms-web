@@ -17,6 +17,7 @@
     <el-table :data="userData.data"
               border
               stripe
+              ref="userSelectTable"
               highlight-current-row
               @current-change="selectOperator"
               :header-cell-style="{background:'#fafafa',textAlign:'center'}"
@@ -56,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, reactive} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {Search} from '@element-plus/icons-vue'
 import axios from "axios"
 import {user} from "../../validate/userForm"
@@ -65,6 +66,8 @@ import {getGenderType, getRoleMsg, getRoleType} from "../../utils/userTableMessa
 import {curOperator} from "../../store/recordStore";
 
 const baseURL = base().baseURL + "user"
+
+let userSelectTable = ref()
 
 let userData = reactive({
   pageSize: 10,
@@ -92,6 +95,8 @@ function loadData() {//组件挂载之前从后端获取数据
 
 function fuzzyLoad() {//模糊查询
   let url = baseURL + "/fuzzy"
+  userSelectTable.value.setCurrentRow(undefined)
+  resetPageData()
   let promise = axios.post(url, fuzzy, {
     params: {
       pageSize: userData.pageSize,
@@ -108,7 +113,7 @@ function fuzzyLoad() {//模糊查询
   })
 }
 
-onBeforeMount(() => {
+onMounted(() => {
   loadData()
 })
 
@@ -131,8 +136,10 @@ function resetQuery() {
 }
 
 function selectOperator(curRow) {
-  operator.id = curRow.id
-  operator.nickname = curRow.nickname
+  if (curRow) {
+    operator.id = curRow.id
+    operator.nickname = curRow.nickname
+  }
 }
 </script>
 

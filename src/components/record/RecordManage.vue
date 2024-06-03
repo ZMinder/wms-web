@@ -69,6 +69,8 @@ import {baseURL as base} from "../../store/store";
 
 const baseURL = base().baseURL + "record"
 
+let user = JSON.parse(sessionStorage.getItem("curUser"))
+
 let recordData = reactive({
   pageSize: 10,
   pageNum: 1,
@@ -81,7 +83,6 @@ let fuzzy = reactive({
   storageName: null,
   goodsTypeName: null,
   recordType: null,
-  roleId: null
 })
 
 let storageData = ref([])//存储仓库数据
@@ -97,7 +98,6 @@ async function loadData() {//组件挂载之前从后端获取数据
 function loadStorageData() {
   let url = base().baseURL + "storage/list"
   let promise = axios.get(url)
-
   promise.then(response => {
     if (response.data.code == 200) {
       Object.assign(storageData.value, response.data.data)
@@ -121,11 +121,16 @@ function loadGoodsTypeData() {
 }
 
 function loadRecordData() {
+  let params = {
+    pageSize: recordData.pageSize,
+    pageNum: recordData.pageNum,
+    operatorId: null
+  }
+  if (user.roleId == 2) {//普通只允许查看自己的record
+    params.operatorId = user.id
+  }
   let promise = axios.post(baseURL + "/fuzzy", fuzzy, {
-    params: {
-      pageSize: recordData.pageSize,
-      pageNum: recordData.pageNum,
-    }
+    params: params
   })
 
   promise.then(response => {
