@@ -120,7 +120,7 @@ function loadGoodsTypeData() {
 }
 
 function loadRecordData() {
-  let promise = axios.post(baseURL, fuzzy, {
+  let promise = axios.post(baseURL + "/fuzzy", fuzzy, {
     params: {
       pageSize: recordData.pageSize,
       pageNum: recordData.pageNum,
